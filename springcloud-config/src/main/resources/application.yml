@@ -1,5 +1,5 @@
 server:
-  port: 8001
+  port: 8082
 
 spring:
   application:
@@ -19,6 +19,12 @@ spring:
           force-pull: true
           #配置GitHub的仓库的搜索路径（固定的不要补全！！！）
           search-paths: ConfigCenter
+
+  rabbitmq:                    #本地环境不需要配置mq，但是需要启动mq,Springboot会自动连接本地mq
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
 
 eureka:
   client:

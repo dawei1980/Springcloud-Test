@@ -1,5 +1,17 @@
 server:
-  port: 8003
+  port: 8083
+
+spring:
+  application:
+    name: spring-login
+  cloud:
+    config:
+      uri: http://localhost:8082/ConfigCenterDev #config server 端地址
+      profile: dev #项目配置文件选择
+      label: master #git仓库的分支
+      discovery:
+        enabled: true
+        service-id: springcloud-config #config-server服务名称
 
 eureka:
   client:
