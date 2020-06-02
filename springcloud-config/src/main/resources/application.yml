@@ -5,11 +5,6 @@ spring:
   application:
     name: springcloud-config
 
-  #####################SVN#############################
-  profiles:
-    active: subversion
-  #####################SVN#############################
-
   cloud:
     config:
       server:
@@ -18,8 +13,8 @@ spring:
         git:
           uri: https://github.com/dawei1980/ConfigCenter  #git仓库地址，就是刚才创建的git仓库
           #配置GitHub的账号和密码
-          username: unicloud2020
-          password: birancloud2020
+          username: dawei1980
+          password: David,801230
           skipSslValidation: true #跳过SSL的认证
           force-pull: true
           #配置GitHub的仓库的搜索路径（固定的不要补全！！！）
