@@ -14,10 +14,9 @@ spring:
           password: David,801230
           skipSslValidation: true #跳过SSL的认证
           force-pull: true
-          #配置GitHub的仓库的搜索路径（固定的不要补全！！！）
-          search-paths: ConfigCenter
+          search-paths: ConfigCenter #配置GitHub的仓库的搜索路径（固定的不要补全！！！）
 
-  rabbitmq:                    #本地环境不需要配置mq，但是需要启动mq,Springboot会自动连接本地mq
+  rabbitmq:  #本地环境不需要配置mq，但是需要启动mq,Springboot会自动连接本地mq
     host: localhost
     port: 5672
     username: guest
