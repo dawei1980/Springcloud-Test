@@ -3,7 +3,7 @@ spring:
     name: spring-login
   profiles:
     active: dev
-  rabbitmq:
+  rabbitmq: #rabbitmq客户端地址
     host: localhost
     port: 32775
     username: guest
@@ -17,7 +17,7 @@ spring:
   cloud:
     config:
       uri: http://localhost:8082 #config server 端地址
-      label: master
+      label: master #git分支
       profile: dev
     bus:
       trace:
