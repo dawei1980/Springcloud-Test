@@ -1,31 +1,6 @@
 server:
   port: 8082
 
-spring:
-  application:
-    name: springcloud-config
-
-  cloud:
-    config:
-      server:
-        native:
-          search-locations: C://WorkPlace-Project//AgricultureProject//ConfigFiles
-        git:
-          uri: https://github.com/dawei1980/ConfigCenter  #git仓库地址，就是刚才创建的git仓库
-          #配置GitHub的账号和密码
-          username: dawei1980
-          password: David,801230
-          skipSslValidation: true #跳过SSL的认证
-          force-pull: true
-          #配置GitHub的仓库的搜索路径（固定的不要补全！！！）
-          search-paths: ConfigCenter
-
-  rabbitmq:                    #本地环境不需要配置mq，但是需要启动mq,Springboot会自动连接本地mq
-    host: localhost
-    port: 5672
-    username: guest
-    password: guest
-
 eureka:
   client:
     service-url:
