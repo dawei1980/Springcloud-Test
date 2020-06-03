@@ -13,6 +13,15 @@ spring:
         enabled: true
         service-id: springcloud-config #config-server服务名称
 
+management:
+  endpoint:
+    shutdown:
+      enabled: false
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
 eureka:
   client:
     service-url:
