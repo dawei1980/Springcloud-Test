@@ -23,3 +23,18 @@ spring:
       trace:
         enabled: true
       enabled: true
+
+#---
+#spring:
+#  profiles: prod
+#  application:
+#    name: config-single-client
+#  cloud:
+#    config:
+#      uri: http://localhost:8082
+#      label: master
+#      profile: prod
+#    bus:
+#      trace:
+#        enabled: true
+#      enabled: true
