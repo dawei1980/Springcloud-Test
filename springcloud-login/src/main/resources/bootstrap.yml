@@ -13,7 +13,7 @@ spring:
 spring:
   profiles: dev
   application:
-    name: config-single-client
+    name: spring-login
   cloud:
     config:
       uri: http://localhost:8082 #config server 端地址
