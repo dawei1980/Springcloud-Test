@@ -1,17 +1,29 @@
 server:
-  port: 8083
+  port: 8085
 
 spring:
   application:
-    name: spring-login
+    name: spring-management
+  profiles:
+    active: dev
   cloud:
     config:
-      uri: http://localhost:8082/ConfigCenterDev #config server 端地址
-      profile: dev #项目配置文件选择
-      label: master #git仓库的分支
+      uri: http://localhost:8082 #config server 端地址
+      label: master #git分支
+      profile: dev
       discovery:
         enabled: true
         service-id: springcloud-config #config-server服务名称
+    bus:
+      trace:
+        enabled: true
+      enabled: true
+
+  #  rabbitmq: #rabbitmq客户端地址
+  #    host: localhost
+  #    port: 32775
+  #    username: guest
+  #    password: guest
 
 management:
   endpoint:
