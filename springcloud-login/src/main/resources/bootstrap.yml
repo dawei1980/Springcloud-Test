@@ -1,19 +1,19 @@
 spring:
   application:
-    name: spring-login
+    name: SPRING-LOGIN
   profiles:
     active: dev
-  rabbitmq: #rabbitmq客户端地址
-    host: localhost
-    port: 32775
-    username: guest
-    password: guest
+#  rabbitmq: #rabbitmq客户端地址
+#    host: localhost
+#    port: 32775
+#    username: guest
+#    password: guest
 
 ---
 spring:
   profiles: dev
   application:
-    name: spring-login
+    name: SPRING-LOGIN
   cloud:
     config:
       uri: http://localhost:8082 #config server 端地址

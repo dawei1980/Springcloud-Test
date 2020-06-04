@@ -1,6 +1,6 @@
 spring:
   application:
-    name: springcloud-config
+    name: SPRINGCLOUD-CONFIG
 
   cloud:
     config:
@@ -14,7 +14,13 @@ spring:
           password: David,801230
           skipSslValidation: true #跳过SSL的认证
           force-pull: true
-          search-paths: ConfigCenter #配置GitHub的仓库的搜索路径（固定的不要补全！！！）
+          search-paths:
+          - ConfigCenter #配置GitHub的仓库的搜索路径（固定的不要补全！！！）
+    #开启消息总线
+    bus:
+      enabled: true
+      trace:
+        enabled: true
 
   rabbitmq:  #本地环境不需要配置mq，但是需要启动mq,Springboot会自动连接本地mq
     host: localhost

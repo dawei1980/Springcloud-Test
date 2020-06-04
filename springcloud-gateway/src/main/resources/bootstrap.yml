@@ -1,0 +1,58 @@
+spring:
+  profiles:
+    active: path-route      #配置文件名 和 spring.profiles.active 相对应
+  application:
+    name: SPRING-GATEWAY
+  cloud:
+    #设置路由规则
+    gateway:
+      routes:
+        - id: gateway
+          uri: lb://SPRING-LOGIN        #代表从注册中心获取服务，且以lb(load-balance)负载均衡方式转发
+          predicates:                     #断言
+            - Path=/springlogin/**            #表示将以/service01/**开头的请求转发到uri为lb://MICROSERVICE01的地址上
+            - After=2019-06-20T00:00:00.789-07:00[America/Denver] #表示在该时间点之后的时间，发出的请求会被路由到uri
+            - Method=GET #表示GET请求，都会被路由到uri
+      #        filters:
+      #        - StripPrefix=1                #表示将Path的路径/service01在转发前去掉，如果设置StripPrefix=2，表示将/service01/*去掉 以此类推... 同时将spring.cloud.gateway.discovery.locator.enabled改为false，如果不改的话，之前的localhost:8799/client01/test01这样的请求地址也能正常访问，因为这时为每个服务创建了2个router
+
+      discovery:
+        locator:
+          #表示gateway开启服务注册和发现功能,
+          #并且spring cloud gateway自动根据服务发现为每一个服务创建了一个router，这个router将以服务名开头的请求路径转发到对应的服务
+          enabled: true
+          #表示将请求路径的服务名配置改成小写  因为服务注册的时候，向注册中心注册时将服务名转成大写的了
+          lower-case-service-id: true
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            # 允许携带认证信息
+            # 允许跨域的源(网站域名/ip)，设置*为全部
+            # 允许跨域请求里的head字段，设置*为全部
+            # 允许跨域的method， 默认为GET和OPTIONS，设置*为全部
+            # 跨域允许的有效期
+            allow-credentials: true
+            allowed-origins:
+              - "http://localhost:8083"
+              - "http://localhost:13010"
+            allowed-headers: "*"
+            allowed-methods:
+              - OPTIONS
+              - GET
+              - POST
+            max-age: 3600
+            # 允许response的head信息
+            # 默认仅允许如下6个：
+            #     Cache-Control
+            #     Content-Language
+            #     Content-Type
+            #     Expires
+            #     Last-Modified
+            #     Pragma
+            #exposed-headers:
+
+
+
+
+
+
