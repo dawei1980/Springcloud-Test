@@ -5,7 +5,7 @@ server:
 
 spring:
   application:
-    name: SPRINGCLOUD-SERVER
+    name: springcloud-server
   freemarker:
     prefer-file-system-access: false #注意这个属性必须加，否则eureka不会生效
 
