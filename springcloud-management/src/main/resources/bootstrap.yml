@@ -1,0 +1,43 @@
+spring:
+  application:
+    name: springcloud-management
+  profiles:
+    active: dev
+  cloud:
+    config:
+      uri: http://localhost:8082 #config server 端地址
+      label: master #git分支
+      profile: dev
+      discovery:
+        enabled: true
+        service-id: springcloud-config #config-server服务名称
+    bus:
+      trace:
+        enabled: true
+      enabled: true
+
+  #  rabbitmq: #rabbitmq客户端地址
+  #    host: localhost
+  #    port: 32775
+  #    username: guest
+  #    password: guest
+
+management:
+  endpoint:
+    shutdown:
+      enabled: false
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+server:
+  port: 8085
+
+eureka:
+  client:
+    service-url:
+      #defaultZone 这个是不会提示的，此处需要自己写
+      #实际上属性应该是service-url,这个属性是个map（key-value）格式；当key是defaultZone的时候才能被解析；所以这里没有提示，
+      #但是自己还需要写一个defaultZone；
+      defaultZone: http://localhost:8761/eureka/eureka
