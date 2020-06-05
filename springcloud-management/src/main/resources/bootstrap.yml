@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: spring-management
+    name: springcloud-management
   profiles:
     active: dev
   cloud:
