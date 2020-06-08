@@ -16,20 +16,15 @@ spring:
         enabled: true
       enabled: true
 
-  #  rabbitmq: #rabbitmq客户端地址
-  #    host: localhost
-  #    port: 32775
-  #    username: guest
-  #    password: guest
 
-management:
-  endpoint:
-    shutdown:
-      enabled: false
-  endpoints:
-    web:
-      exposure:
-        include: "*"
+#management:
+#  endpoint:
+#    shutdown:
+#      enabled: false
+#  endpoints:
+#    web:
+#      exposure:
+#        include: "*"
 
 server:
   port: 8083

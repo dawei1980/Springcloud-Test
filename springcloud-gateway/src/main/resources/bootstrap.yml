@@ -10,17 +10,17 @@ spring:
     allow-bean-definition-overriding: true
 
   cloud:
-#    config:
-#      uri: http://localhost:8082 #config server 端地址
-#      label: master #git分支
-#      profile: dev
-#      discovery:
-#        enabled: true
-#        service-id: springcloud-config #config-server服务名称
-#    bus:
-#      trace:
-#        enabled: true
-#      enabled: true
+    config:
+      uri: http://localhost:8082 #config server 端地址
+      label: master #git分支
+      profile: dev
+      discovery:
+        enabled: true
+        service-id: springcloud-config #config-server服务名称
+    bus:
+      trace:
+        enabled: true
+      enabled: true
 
     #设置路由规则
     gateway:
@@ -29,18 +29,15 @@ spring:
           uri: lb://SPRINGCLOUD-LOGIN        #代表从注册中心获取服务，且以lb(load-balance)负载均衡方式转发
           predicates:                     #断言
             - Path=/springcloudlogin/**            #表示将以/service01/**开头的请求转发到uri为lb://MICROSERVICE01的地址上
-            - After=2019-06-20T00:00:00.789-07:00[America/Denver] #表示在该时间点之后的时间，发出的请求会被路由到uri
-            - Method=GET #表示GET请求，都会被路由到uri
-        #        filters:
-        #        - StripPrefix=1                #表示将Path的路径/service01在转发前去掉，如果设置StripPrefix=2，表示将/service01/*去掉 以此类推... 同时将spring.cloud.gateway.discovery.locator.enabled改为false，如果不改的话，之前的localhost:8799/client01/test01这样的请求地址也能正常访问，因为这时为每个服务创建了2个router
+          filters:
+            - RewritePath=/customeradd,/customer/add
 
         - id: management_route
           uri: lb://SPRINGCLOUD-MANAGEMENT        #代表从注册中心获取服务，且以lb(load-balance)负载均衡方式转发
           predicates:                     #断言
             - Path=/springcloudmanagement/**            #表示将以/service01/**开头的请求转发到uri为lb://MICROSERVICE01的地址上
-            - After=2019-06-20T00:00:00.789-07:00[America/Denver] #表示在该时间点之后的时间，发出的请求会被路由到uri
-            - Method=GET #表示GET请求，都会被路由到uri
-
+          filters:
+            - RewritePath=/customeradd,/customer/add
       discovery:
         locator:
           #表示gateway开启服务注册和发现功能,
