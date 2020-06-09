@@ -16,16 +16,6 @@ spring:
         enabled: true
       enabled: true
 
-
-#management:
-#  endpoint:
-#    shutdown:
-#      enabled: false
-#  endpoints:
-#    web:
-#      exposure:
-#        include: "*"
-
 server:
   port: 8083
 

@@ -22,15 +22,6 @@ spring:
   #    username: guest
   #    password: guest
 
-management:
-  endpoint:
-    shutdown:
-      enabled: false
-  endpoints:
-    web:
-      exposure:
-        include: "*"
-
 server:
   port: 8085
 
