@@ -28,6 +28,14 @@ spring:
           enabled: true
           # 服务名小写
           lower-case-service-id: true
+      routes:
+        - id: login_route
+          uri: http://localhost:8083    #代表从注册中心获取服务，且以lb(load-balance)负载均衡方式转发
+          predicates:                     #断言
+            - Path=/* #匹配路径
+            - Method=GET #指定方式
+          filters:
+            - StripPrefix=1 #去除第一个级前缀
 
 eureka:
   client:
@@ -39,23 +47,23 @@ eureka:
 
 
 #开启端点
-#management:
-#  endpoint:
-#    shutdown:
-#      enabled: false
-#  endpoints:
-#    web:
-#      exposure:
-#        include: "*"
-
-#开启端点
 management:
+  endpoint:
+    shutdown:
+      enabled: false
   endpoints:
     web:
       exposure:
-        include: '*'
-  security:
-    enabled: false
+        include: "*"
+
+#开启端点
+#management:
+#  endpoints:
+#    web:
+#      exposure:
+#        include: '*'
+#  security:
+#    enabled: false
 
 
 
