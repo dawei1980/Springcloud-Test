@@ -31,23 +31,12 @@ import java.util.concurrent.atomic.AtomicReference;
  */
 @Component
 public class MyGlobalFilter implements GlobalFilter , Ordered {
-//    @Override
-//    public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
-//        System.out.println("-----------------全局过滤器MyGlobalFilter---------------------\n");
-//        String token = exchange.getRequest().getQueryParams().getFirst("token");
-//        if (StringUtils.isBlank(token)) {
-//            exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED); //401 Unauthorized
-//            return exchange.getResponse().setComplete();
-//        }
-//        return chain.filter(exchange);
-//    }
-//    //设置过滤器的优先级，值越小优先级越高
-//    @Override
-//    public int getOrder() {
-//        return 0;
-//    }
 
-
+    /**Get请求需要带token参数
+     * localhost:8084/springcloud-login/login/getAllLogin?token=1
+     *
+     * Post请求需要传递参数
+     * */
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         ServerHttpRequest serverHttpRequest = exchange.getRequest();
@@ -55,7 +44,6 @@ public class MyGlobalFilter implements GlobalFilter , Ordered {
         if ("POST".equals(method)) {
             //从请求里获取Post请求体
             String bodyStr = resolveBodyFromRequest(serverHttpRequest);
-            //TODO 得到Post请求的请求参数后，做你想做的事
 
             //下面的将请求体再次封装写回到request里，传到下一级，否则，由于请求体已被消费，后续的服务将取不到值
             URI uri = serverHttpRequest.getURI();
@@ -74,7 +62,6 @@ public class MyGlobalFilter implements GlobalFilter , Ordered {
         } else if ("GET".equals(method)) {
 //            Map requestQueryParams = serverHttpRequest.getQueryParams();
 
-            /**Get请求需要带token参数*/
             System.out.println("-----------------全局过滤器MyGlobalFilter---------------------\n");
             String token = exchange.getRequest().getQueryParams().getFirst("token");
             if (StringUtils.isBlank(token)) {
