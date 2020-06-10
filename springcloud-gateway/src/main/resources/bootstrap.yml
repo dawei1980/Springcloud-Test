@@ -22,6 +22,13 @@ spring:
         enabled: true
       enabled: true
 
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          # 服务名小写
+          lower-case-service-id: true
+
 eureka:
   client:
     service-url:
@@ -32,14 +39,23 @@ eureka:
 
 
 #开启端点
+#management:
+#  endpoint:
+#    shutdown:
+#      enabled: false
+#  endpoints:
+#    web:
+#      exposure:
+#        include: "*"
+
+#开启端点
 management:
-  endpoint:
-    shutdown:
-      enabled: false
   endpoints:
     web:
       exposure:
-        include: "*"
+        include: '*'
+  security:
+    enabled: false
 
 
 
