@@ -28,12 +28,14 @@ public class LoginTestController {
         }else {
             return new JsonObjectResult(ResultCode.NO_DATA, "No data");
         }
+
+        //localhost:8084/springcloud-login/login/getAllLogin?token=1
     }
 
     /**
      * 登录
      */
-    @PostMapping("/login")
+    @PostMapping("/authLogin")
     public Object login(@RequestParam(value = "username") String username,
                         @RequestParam(value = "password") String password){
 
