@@ -1,4 +1,4 @@
-package com.springcloud.gateway.config;
+package com.springcloud.gateway.filter;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;

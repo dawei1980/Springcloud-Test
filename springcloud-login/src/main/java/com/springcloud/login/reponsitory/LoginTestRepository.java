@@ -10,4 +10,6 @@ import java.util.List;
 public interface LoginTestRepository extends JpaRepository<LoginTest,Integer> {
 
     List<LoginTest> findAll();
+
+    LoginTest findByUsernameAndPassword(String username, String password);
 }
