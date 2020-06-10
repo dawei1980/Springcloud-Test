@@ -38,6 +38,9 @@ public class LoginTestController {
                         @RequestParam(value = "password") String password){
 
         if(!"".equals(username) && !"".equals(password)){
+
+//            LoginTest loginTest = loginTestRepository.findByUsernameAndPassword(username,password);
+
             //密码是正确的
             //生成jwt令牌,返回到客户端
             Map<String,String> info = new HashMap<>();
