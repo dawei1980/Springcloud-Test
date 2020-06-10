@@ -29,13 +29,17 @@ spring:
           # 服务名小写
           lower-case-service-id: true
       routes:
-        - id: login_route
-          uri: http://localhost:8083    #代表从注册中心获取服务，且以lb(load-balance)负载均衡方式转发
+        - id: springcloud-login
+          uri: lb://springcloud-login   #代表从注册中心获取服务，且以lb(load-balance)负载均衡方式转发
           predicates:                     #断言
-            - Path=/* #匹配路径
-            - Method=GET #指定方式
+            - Path= /auth/** #匹配路径
           filters:
             - StripPrefix=1 #去除第一个级前缀
+            - Custom
+            - name: Retry
+              args:
+                retries: 3
+                statuses: BAD_GATEWAY
 
 eureka:
   client:
