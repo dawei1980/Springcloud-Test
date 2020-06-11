@@ -7,9 +7,9 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 @Configuration
-public class KeyResolverConfig {
+public class CustomResolver {
     /**
-     * 定义一个KeyResolver
+     * 定义一个KeyResolver为限流
      */
     @Bean
     public KeyResolver ipKeyResolver() {

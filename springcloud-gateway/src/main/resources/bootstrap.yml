@@ -49,6 +49,11 @@ spring:
           - Path= /logintest/** #拦截的路径
           filters:
             - MyParam=name # 配置后就可以获取请求中key为name的值
+#            - name: RequestRateLimiter
+#              args: #限流配置
+#                redis-rate-limiter.replenishRate: 1
+#                redis-rate-limiter.burstCapacity: 1
+#                key-resolver: "#{@ipKeyResolver}"
 
         - id: springcloud-management
           uri: lb://springcloud-management   #代表从注册中心获取服务，且以lb(load-balance)负载均衡方式转发
@@ -56,6 +61,11 @@ spring:
             - Path= /management/** #拦截的路径
           filters:
             - MyParam=name # 配置后就可以获取请求中key为name的值
+#            - name: RequestRateLimiter
+#              args:
+#                redis-rate-limiter.replenishRate: 1
+#                redis-rate-limiter.burstCapacity: 1
+#                key-resolver: "#{@ipKeyResolver}"
 
 eureka:
   client:
@@ -75,6 +85,14 @@ management:
   endpoint:
     health:
       show-details: always
+
+hystrix:
+  command:
+    fallbackcmd:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 50000
 
 
 
