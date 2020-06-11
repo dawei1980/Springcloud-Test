@@ -60,8 +60,6 @@ public class MyGlobalFilter implements GlobalFilter , Ordered {
             //封装request，传给下一级
             return chain.filter(exchange.mutate().request(request).build());
         } else if ("GET".equals(method)) {
-//            Map requestQueryParams = serverHttpRequest.getQueryParams();
-
             System.out.println("-----------------全局过滤器MyGlobalFilter---------------------\n");
             String token = exchange.getRequest().getQueryParams().getFirst("token");
             if (StringUtils.isBlank(token)) {
