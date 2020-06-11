@@ -4,14 +4,22 @@ import io.netty.buffer.ByteBufAllocator;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
+import org.springframework.cloud.gateway.filter.factory.rewrite.CachedBodyOutputMessage;
+import org.springframework.cloud.gateway.support.BodyInserterContext;
+import org.springframework.cloud.gateway.support.DefaultServerRequest;
 import org.springframework.core.Ordered;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.core.io.buffer.DataBufferUtils;
 import org.springframework.core.io.buffer.NettyDataBufferFactory;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpRequestDecorator;
 import org.springframework.stereotype.Component;
+import org.springframework.web.reactive.function.BodyInserter;
+import org.springframework.web.reactive.function.BodyInserters;
+import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -19,15 +27,18 @@ import reactor.core.publisher.Mono;
 import java.net.URI;
 import java.nio.CharBuffer;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 /**
  * @title: MyGlobalFilter
  * @projectName:
  * @description: TODO
- * @author: Tzh
- * @date: 2019/11/25  19:45
+ * @author: Jiang dawei
+ * @date: 2020/06/11
  */
 @Component
 public class MyGlobalFilter implements GlobalFilter , Ordered {
@@ -37,29 +48,62 @@ public class MyGlobalFilter implements GlobalFilter , Ordered {
      *
      * Post请求需要传递参数
      * */
-    @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
-        ServerHttpRequest serverHttpRequest = exchange.getRequest();
-        String method = serverHttpRequest.getMethodValue();
+        System.out.println("-----------------全局过滤器MyGlobalFilter---------------------");
+        System.out.println("-----------------请求方式---------------------");
+        ServerRequest serverRequest = new DefaultServerRequest(exchange);
+        // mediaType
+        MediaType mediaType = exchange.getRequest().getHeaders().getContentType();
+        String method = exchange.getRequest().getMethodValue();
+        // read & modify body
         if ("POST".equals(method)) {
-            //从请求里获取Post请求体
-            String bodyStr = resolveBodyFromRequest(serverHttpRequest);
 
-            //下面的将请求体再次封装写回到request里，传到下一级，否则，由于请求体已被消费，后续的服务将取不到值
-            URI uri = serverHttpRequest.getURI();
-            ServerHttpRequest request = serverHttpRequest.mutate().uri(uri).build();
-            DataBuffer bodyDataBuffer = stringBuffer(bodyStr);
-            Flux<DataBuffer> bodyFlux = Flux.just(bodyDataBuffer);
-
-            request = new ServerHttpRequestDecorator(request) {
-                @Override
-                public Flux<DataBuffer> getBody() {
-                    return bodyFlux;
+            Mono<String> modifiedBody = serverRequest.bodyToMono(String.class).flatMap(body -> {
+                if (MediaType.APPLICATION_FORM_URLENCODED.isCompatibleWith(mediaType)) {
+                    // origin body map
+                    //这是你post请求获取到的参数
+                    Map<String, Object> bodyMap = decodeBody(body);
+                    //这里做你的业务操作
+                    //重新放回
+                    return Mono.just(encodeBody(bodyMap));
                 }
-            };
-            //封装request，传给下一级
-            return chain.filter(exchange.mutate().request(request).build());
-        } else if ("GET".equals(method)) {
+                return Mono.empty();
+            });
+
+            BodyInserter bodyInserter = BodyInserters.fromPublisher(modifiedBody, String.class);
+            HttpHeaders headers = new HttpHeaders();
+            headers.putAll(exchange.getRequest().getHeaders());
+
+            // the new content type will be computed by bodyInserter
+            // and then set in the request decorator
+            headers.remove(HttpHeaders.CONTENT_LENGTH);
+
+            CachedBodyOutputMessage outputMessage = new CachedBodyOutputMessage(exchange, headers);
+            return bodyInserter.insert(outputMessage, new BodyInserterContext()).then(Mono.defer(() -> {
+                ServerHttpRequestDecorator decorator = new ServerHttpRequestDecorator(exchange.getRequest()) {
+
+                    public HttpHeaders getHeaders() {
+                        long contentLength = headers.getContentLength();
+                        HttpHeaders httpHeaders = new HttpHeaders();
+                        httpHeaders.putAll(super.getHeaders());
+                        if (contentLength > 0) {
+                            httpHeaders.setContentLength(contentLength);
+                        } else {
+                            httpHeaders.set(HttpHeaders.TRANSFER_ENCODING, "chunked");
+                        }
+                        return httpHeaders;
+                    }
+
+                    public Flux<DataBuffer> getBody() {
+                        return outputMessage.getBody();
+                    }
+                };
+                return chain.filter(exchange.mutate().request(decorator).build());
+            }));
+        }else if ("GET".equals(method)) {
+            Map requestQueryParams = exchange.getRequest().getQueryParams();
+            //TODO 得到Get请求的请求参数后，做你想做的事
+
             System.out.println("-----------------全局过滤器MyGlobalFilter---------------------\n");
             String token = exchange.getRequest().getQueryParams().getFirst("token");
             if (StringUtils.isBlank(token)) {
@@ -72,36 +116,19 @@ public class MyGlobalFilter implements GlobalFilter , Ordered {
         return chain.filter(exchange);
     }
 
-    /**
-     * 从Flux<DataBuffer>中获取字符串的方法
-     * @return 请求体
-     */
-    private String resolveBodyFromRequest(ServerHttpRequest serverHttpRequest) {
-        //获取请求体
-        Flux<DataBuffer> body = serverHttpRequest.getBody();
 
-        AtomicReference<String> bodyRef = new AtomicReference<>();
-        body.subscribe(buffer -> {
-            CharBuffer charBuffer = StandardCharsets.UTF_8.decode(buffer.asByteBuffer());
-            DataBufferUtils.release(buffer);
-            bodyRef.set(charBuffer.toString());
-        });
-        //获取request body
-        return bodyRef.get();
+    private Map<String, Object> decodeBody(String body) {
+        return Arrays.stream(body.split("&")).map(s -> s.split("="))
+                .collect(Collectors.toMap(arr -> arr[0], arr -> arr[1]));
     }
 
-    private DataBuffer stringBuffer(String value) {
-        byte[] bytes = value.getBytes(StandardCharsets.UTF_8);
-
-        NettyDataBufferFactory nettyDataBufferFactory = new NettyDataBufferFactory(ByteBufAllocator.DEFAULT);
-        DataBuffer buffer = nettyDataBufferFactory.allocateBuffer(bytes.length);
-        buffer.write(bytes);
-        return buffer;
+    private String encodeBody(Map<String, Object> map) {
+        return map.entrySet().stream().map(e -> e.getKey() + "=" + e.getValue()).collect(Collectors.joining("&"));
     }
 
     @Override
     public int getOrder() {
-        return 0;
+        return Ordered.HIGHEST_PRECEDENCE;
     }
 }
 
