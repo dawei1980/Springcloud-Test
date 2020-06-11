@@ -50,6 +50,13 @@ spring:
           filters:
             - MyParam=name # 配置后就可以获取请求中key为name的值
 
+        - id: springcloud-management
+          uri: lb://springcloud-management   #代表从注册中心获取服务，且以lb(load-balance)负载均衡方式转发
+          predicates:                     #断言
+            - Path= /management/** #拦截的路径
+          filters:
+            - MyParam=name # 配置后就可以获取请求中key为name的值
+
 eureka:
   client:
     service-url:

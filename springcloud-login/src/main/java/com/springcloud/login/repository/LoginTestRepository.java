@@ -1,4 +1,4 @@
-package com.springcloud.login.reponsitory;
+package com.springcloud.login.repository;
 
 import com.springcloud.login.entity.LoginTest;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -1,7 +1,7 @@
 package com.springcloud.login.controller;
 
 import com.springcloud.login.entity.LoginTest;
-import com.springcloud.login.reponsitory.LoginTestRepository;
+import com.springcloud.login.repository.LoginTestRepository;
 import com.springcloud.login.result.JsonObjectResult;
 import com.springcloud.login.result.ResultCode;
 import com.springcloud.login.utils.JwtUtil;
