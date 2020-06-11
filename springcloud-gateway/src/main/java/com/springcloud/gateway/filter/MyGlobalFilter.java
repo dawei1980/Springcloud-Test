@@ -101,15 +101,15 @@ public class MyGlobalFilter implements GlobalFilter , Ordered {
                 return chain.filter(exchange.mutate().request(decorator).build());
             }));
         }else if ("GET".equals(method)) {
-            Map requestQueryParams = exchange.getRequest().getQueryParams();
-            //TODO 得到Get请求的请求参数后，做你想做的事
-
-            System.out.println("-----------------全局过滤器MyGlobalFilter---------------------\n");
-            String token = exchange.getRequest().getQueryParams().getFirst("token");
-            if (StringUtils.isBlank(token)) {
-                exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
-                return exchange.getResponse().setComplete();
-            }
+//            Map requestQueryParams = exchange.getRequest().getQueryParams();
+//            //TODO 得到Get请求的请求参数后，做你想做的事
+//
+//            System.out.println("-----------------全局过滤器MyGlobalFilter---------------------\n");
+//            String token = exchange.getRequest().getQueryParams().getFirst("token");
+//            if (StringUtils.isBlank(token)) {
+//                exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
+//                return exchange.getResponse().setComplete();
+//            }
 
             return chain.filter(exchange);
         }
