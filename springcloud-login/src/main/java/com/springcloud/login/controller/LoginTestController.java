@@ -32,6 +32,18 @@ public class LoginTestController {
         //localhost:8084/springcloud-login/login/getAllLogin?token=1
     }
 
+    @PostMapping(value = "/userLogin")
+    public Object userLogin(@RequestParam(value = "username") String username,
+                            @RequestParam(value = "password") String password){
+
+        if(!"".equals(username) && !"".equals(password)){
+            LoginTest loginTest = loginTestRepository.findByUsernameAndPassword(username,password);
+            return new JsonObjectResult(ResultCode.SUCCESS, "Success",loginTest);
+        }else {
+            return new JsonObjectResult(ResultCode.PARAMS_ERROR, "The parameter is wrong");
+        }
+    }
+
     /**
      * 登录
      */
