@@ -86,13 +86,7 @@ management:
     health:
       show-details: always
 
-hystrix:
-  command:
-    fallbackcmd:
-      execution:
-        isolation:
-          thread:
-            timeoutInMilliseconds: 50000
+
 
 
 
