@@ -10,6 +10,6 @@ import java.util.List;
 public interface LoginManagerRepository extends JpaRepository<LoginManager,Integer> {
 
     List<LoginManager> findAll();
-
     LoginManager findByUsernameAndPassword(String username, String password);
+
 }
