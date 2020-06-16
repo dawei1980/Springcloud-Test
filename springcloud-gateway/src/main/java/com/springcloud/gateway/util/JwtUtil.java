@@ -1,4 +1,4 @@
-package com.springcloud.gateway.utils;
+package com.springcloud.gateway.util;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;

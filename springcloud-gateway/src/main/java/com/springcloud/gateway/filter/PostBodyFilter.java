@@ -60,7 +60,6 @@ import java.util.stream.Collectors;
  * 除此之外，其他类型的请求不做任何处理，直接放行给后面。
  *
  *
- * @author lsy
  *
  */
 public class PostBodyFilter implements GlobalFilter, Ordered {

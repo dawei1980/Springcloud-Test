@@ -10,10 +10,6 @@ import java.util.List;
 
 /**
  * @title: MyParamGatewayFilterFactory
- * @projectName: spring_cloud
- * @description: TODO
- * @author: Tzh
- * @date: 2019/11/25  19:06
  */
 @Component
 public class MyParamGatewayFilterFactory extends AbstractGatewayFilterFactory<MyParamGatewayFilterFactory.MyParam> {
