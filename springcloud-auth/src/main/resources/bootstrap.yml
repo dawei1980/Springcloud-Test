@@ -27,5 +27,14 @@ eureka:
       #但是自己还需要写一个defaultZone；
       defaultZone: http://localhost:8761/eureka/eureka
 
+#安全配置
+security:
+  oauth2:
+    resource:
+      id: producer-service
+      #指定用户信息地址
+      user-info-uri: https://localhost:8086/auth/user
+      prefer-token-info: false
+
 
 
