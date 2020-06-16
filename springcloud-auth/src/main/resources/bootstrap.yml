@@ -1,15 +1,20 @@
 spring:
   application:
-    name: springcloud-auth
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/spring-cloud-auth?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
-    username: root
-    password: 801230
-  jpa:
-    hibernate:
-      ddl-auto: update
-    show-sql: true
+    name: springcloud-login
+  profiles:
+    active: dev
+  cloud:
+    config:
+      uri: http://localhost:8082 #config server 端地址
+      label: master #git分支
+      profile: dev
+      discovery:
+        enabled: true
+        service-id: springcloud-config #config-server服务名称
+    bus:
+      trace:
+        enabled: true
+      enabled: true
 
 server:
   port: 8086
@@ -21,3 +26,6 @@ eureka:
       #实际上属性应该是service-url,这个属性是个map（key-value）格式；当key是defaultZone的时候才能被解析；所以这里没有提示，
       #但是自己还需要写一个defaultZone；
       defaultZone: http://localhost:8761/eureka/eureka
+
+
+
