@@ -55,10 +55,22 @@ spring:
 #                redis-rate-limiter.burstCapacity: 1
 #                key-resolver: "#{@ipKeyResolver}"
 
+        - id: springcloud-auth
+          uri: lb://springcloud-auth   #代表从注册中心获取服务，且以lb(load-balance)负载均衡方式转发
+          predicates:                     #断言
+          - Path= /auth/** #拦截的路径
+          filters:
+            - MyParam=name # 配置后就可以获取请求中key为name的值
+#            - name: RequestRateLimiter
+#              args:
+#                redis-rate-limiter.replenishRate: 1
+#                redis-rate-limiter.burstCapacity: 1
+#                key-resolver: "#{@ipKeyResolver}"
+
         - id: springcloud-management
           uri: lb://springcloud-management   #代表从注册中心获取服务，且以lb(load-balance)负载均衡方式转发
           predicates:                     #断言
-            - Path= /management/** #拦截的路径
+          - Path= /management/** #拦截的路径
           filters:
             - MyParam=name # 配置后就可以获取请求中key为name的值
 #            - name: RequestRateLimiter
