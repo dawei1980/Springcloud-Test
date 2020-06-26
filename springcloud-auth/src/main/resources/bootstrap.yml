@@ -1,6 +1,6 @@
 spring:
   application:
-    name: springcloud-auth
+    name: springcloud-auth-server
   profiles:
     active: dev
   cloud:
@@ -27,14 +27,10 @@ eureka:
       #但是自己还需要写一个defaultZone；
       defaultZone: http://localhost:8761/eureka/eureka
 
-#安全配置
-security:
-  oauth2:
-    resource:
-      id: springcloud-auth
-      #指定用户信息地址
-      user-info-uri: https://localhost:8086/auth/user
-      prefer-token-info: false
+management:
+  endpoint:
+    health:
+      enabled: true
 
 
 
