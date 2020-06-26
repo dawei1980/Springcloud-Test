@@ -1,0 +1,55 @@
+spring:
+  application:
+    name: springcloud-auth-client
+  profiles:
+    active: dev
+  cloud:
+    config:
+      uri: http://localhost:8082 #config server 端地址
+      label: master #git分支
+      profile: dev
+      discovery:
+        enabled: true
+        service-id: springcloud-config #config-server服务名称
+    bus:
+      trace:
+        enabled: true
+      enabled: true
+
+server:
+  port: 8087
+
+eureka:
+  client:
+    service-url:
+      #defaultZone 这个是不会提示的，此处需要自己写
+      #实际上属性应该是service-url,这个属性是个map（key-value）格式；当key是defaultZone的时候才能被解析；所以这里没有提示，
+      #但是自己还需要写一个defaultZone；
+      defaultZone: http://localhost:8761/eureka/eureka
+
+#JWT方法
+security:
+  oauth2:
+    client:
+      client-id: user-client
+      client-secret: user-secret-8888
+      user-authorization-uri: http://localhost:6001/oauth/authorize
+      access-token-uri: http://localhost:6001/oauth/token
+    resource:
+      jwt:
+        key-uri: http://localhost:6001/oauth/token_key
+        key-value: dev
+
+#Redis 方法
+#security:
+#  oauth2:
+#    client:
+#      client-id: user-client
+#      client-secret: user-secret-8888
+#      user-authorization-uri: http://localhost:6001/oauth/authorize
+#      access-token-uri: http://localhost:6001/oauth/token
+#    resource:
+#      id: user-client
+#      user-info-uri: user-info
+#    authorization:
+#      check-token-access: http://localhost:6001/oauth/check_token
