@@ -17,6 +17,8 @@ public class SysUser implements Serializable {
     private String username;
     @Column(name = "password")
     private String password;
+    @Column(name = "header_url")
+    private String headerUrl;
 
     @ManyToMany(fetch= FetchType.EAGER)
     @JoinTable(name = "user_role", joinColumns = { @JoinColumn(name = "user_id") }, inverseJoinColumns = {@JoinColumn(name = "role_id") })
@@ -52,6 +54,14 @@ public class SysUser implements Serializable {
 
     public void setSysRoles(Set<SysRole> sysRoles) {
         this.sysRoles = sysRoles;
+    }
+
+    public String getHeaderUrl() {
+        return headerUrl;
+    }
+
+    public void setHeaderUrl(String headerUrl) {
+        this.headerUrl = headerUrl;
     }
 
 }

@@ -1,12 +1,14 @@
 package com.springcloud.login.controller;
 
 import com.springcloud.login.entity.LoginTest;
+import com.springcloud.login.entity.SysUser;
 import com.springcloud.login.repository.LoginTestRepository;
 import com.springcloud.login.result.JsonObjectResult;
 import com.springcloud.login.result.ResultCode;
 import com.springcloud.login.utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
 import java.util.List;
@@ -14,7 +16,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @RestController
-@RequestMapping(value = "/login")
+@RequestMapping(value = "/api")
 public class LoginTestController {
     @Autowired
     private LoginTestRepository loginTestRepository;
@@ -28,8 +30,6 @@ public class LoginTestController {
         }else {
             return new JsonObjectResult(ResultCode.NO_DATA, "No data");
         }
-
-        //localhost:8084/springcloud-login/login/getAllLogin?token=1
     }
 
     @PostMapping(value = "/userLogin")
@@ -53,8 +53,6 @@ public class LoginTestController {
 
         if(!"".equals(username) && !"".equals(password)){
 
-//            LoginTest loginTest = loginTestRepository.findByUsernameAndPassword(username,password);
-
             //密码是正确的
             //生成jwt令牌,返回到客户端
             Map<String,String> info = new HashMap<>();
@@ -68,4 +66,22 @@ public class LoginTestController {
         }
     }
 
+    @PostMapping("/addUser")
+    public Object addUser(@RequestParam(value = "username") String username,
+                          @RequestParam(value = "password") String password
+//                          @RequestParam(value = "header_image") MultipartFile headerImage
+    ){
+
+        try {
+            String path = "UploadFileUtil.saveImg(headerImage)";
+            SysUser sysUser = new SysUser();
+            sysUser.setUsername(username);
+            sysUser.setPassword(password);
+            sysUser.setHeaderUrl(path);
+            return new JsonObjectResult(ResultCode.SUCCESS, "Success",sysUser);
+        }catch (Exception e){
+            e.printStackTrace();
+            return new JsonObjectResult(ResultCode.PARAMS_ERROR, "The parameter is wrong");
+        }
+    }
 }
