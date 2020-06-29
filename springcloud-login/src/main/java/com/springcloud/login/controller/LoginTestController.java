@@ -6,6 +6,7 @@ import com.springcloud.login.repository.LoginTestRepository;
 import com.springcloud.login.result.JsonObjectResult;
 import com.springcloud.login.result.ResultCode;
 import com.springcloud.login.utils.JwtUtil;
+import com.springcloud.login.utils.UploadFileUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -68,12 +69,12 @@ public class LoginTestController {
 
     @PostMapping("/addUser")
     public Object addUser(@RequestParam(value = "username") String username,
-                          @RequestParam(value = "password") String password
-//                          @RequestParam(value = "header_image") MultipartFile headerImage
-    ){
+                          @RequestParam(value = "password") String password,
+                          @RequestParam(value = "header_image") MultipartFile headerImage){
 
         try {
-            String path = "UploadFileUtil.saveImg(headerImage)";
+            //保存图片
+            String path = UploadFileUtil.saveImg(headerImage);
             SysUser sysUser = new SysUser();
             sysUser.setUsername(username);
             sysUser.setPassword(password);
